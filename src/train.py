@@ -265,9 +265,18 @@ class Trainer:
         print(f"Best validation SMAPE: {self.best_val_smape:.2f}%")
         
         # Save training history
+        # Save training history
         history_path = config.OUTPUTS_DIR / 'training_history.json'
+        
+        # Convert numpy types to Python types for JSON serialization
+        serializable_history = {
+            'train_loss': [float(x) for x in self.training_history['train_loss']],
+            'val_loss': [float(x) for x in self.training_history['val_loss']],
+            'val_smape': [float(x) for x in self.training_history['val_smape']]
+        }
+        
         with open(history_path, 'w') as f:
-            json.dump(self.training_history, f, indent=2)
+            json.dump(serializable_history, f, indent=2)
 
 
 def main():
@@ -332,4 +341,5 @@ def main():
 
 
 if __name__ == "__main__":
+
     main()
